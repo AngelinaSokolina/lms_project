@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from pathlib import Path
+from datetime import timedelta
 
 # Загружаем переменные окружения из файла .env
 load_dotenv()
@@ -29,6 +30,7 @@ INSTALLED_APPS = [
     'django_filters',
     'users',
     'lms',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -133,8 +135,23 @@ CACHES = {
 
 # Настройки Django REST Framework
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',  # <-- ВСЕ эндпоинты требуют авторизации по умолчанию
+    ],
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.OrderingFilter',
     ],
 }
+
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
+

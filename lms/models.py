@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 
 class Course(models.Model):
@@ -6,6 +7,16 @@ class Course(models.Model):
     name = models.CharField(max_length=200, verbose_name='Название')
     preview = models.ImageField(upload_to='courses/previews/', blank=True, null=True, verbose_name='Превью')
     description = models.TextField(blank=True, null=True, verbose_name='Описание')
+
+    # Владелец курса
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='courses',
+        verbose_name='Владелец'
+    )
 
     def __str__(self):
         return self.name
@@ -28,6 +39,16 @@ class Lesson(models.Model):
         on_delete=models.CASCADE,
         related_name='lessons',
         verbose_name='Курс'
+    )
+
+    # Владелец урока
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='lessons',
+        verbose_name='Владелец'
     )
 
     def __str__(self):

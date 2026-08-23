@@ -5,11 +5,12 @@ from .models import Course, Lesson
 class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
-        fields = ['id', 'name', 'description', 'preview', 'video_url', 'course']
+        fields = ['id', 'name', 'description', 'preview', 'video_url', 'course', 'owner']
 
 
 class CourseSerializer(serializers.ModelSerializer):
     """Сериализатор для курса"""
+
     # Поле с количеством уроков
     lessons_count = serializers.SerializerMethodField()
 
@@ -18,7 +19,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ['id', 'name', 'preview', 'description', 'lessons_count', 'lessons']
+        fields = ['id', 'name', 'preview', 'description', 'owner', 'lessons_count', 'lessons']
 
     def get_lessons_count(self, obj):
         """Метод возвращает количество уроков в курсе"""

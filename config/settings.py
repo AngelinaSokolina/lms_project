@@ -27,10 +27,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt',
     'django_filters',
+    'drf_yasg',
     'users',
     'lms',
-    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -154,4 +155,8 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
+
+# Stripe настройки (загружаются из .env)
+STRIPE_API_KEY = os.getenv('STRIPE_API_KEY')
+STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')
 

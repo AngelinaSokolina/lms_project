@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'django_filters',
+    'django_celery_beat',
     'drf_yasg',
     'users',
     'lms',
@@ -159,4 +160,18 @@ SIMPLE_JWT = {
 # Stripe настройки (загружаются из .env)
 STRIPE_API_KEY = os.getenv('STRIPE_API_KEY')
 STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')
+
+
+# Celery настройки
+CELERY_BROKER_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
+CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', 'redis://localhost:6379')
+CELERY_TIMEZONE = 'Europe/Moscow'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_TASK_SOFT_TIME_LIMIT = 30 * 60
+
+# Email настройки
+DEFAULT_FROM_EMAIL = 'webmaster@localhost'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 

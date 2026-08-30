@@ -29,12 +29,16 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'django_filters',
+    'django_celery_beat',
     'drf_yasg',
+    'corsheaders',
     'users',
     'lms',
+    'habits',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -159,4 +163,28 @@ SIMPLE_JWT = {
 # Stripe настройки (загружаются из .env)
 STRIPE_API_KEY = os.getenv('STRIPE_API_KEY')
 STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')
+
+
+# Celery настройки
+CELERY_BROKER_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
+CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', 'redis://localhost:6379')
+CELERY_TIMEZONE = 'Europe/Moscow'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_TASK_SOFT_TIME_LIMIT = 30 * 60
+
+# Email настройки
+DEFAULT_FROM_EMAIL = 'webmaster@localhost'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Telegram настройки
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+
+# CORS настройки
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',      # React фронтенд
+    'http://127.0.0.1:3000',
+    'http://localhost:8080',      # Vue фронтенд
+    'http://127.0.0.1:8080',
+]
 

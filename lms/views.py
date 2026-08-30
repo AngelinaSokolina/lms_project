@@ -7,7 +7,7 @@ from .paginators import CoursePaginator, LessonPaginator
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-
+from .email_utils import send_course_update_email_sync
 
 
 
@@ -32,6 +32,12 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+    def perform_update(self, serializer):
+        """При обновлении курса отправляем уведомление подписчикам"""
+        instance = serializer.save()
+        # Запускаем задачу отправки писем
+        send_course_update_email_sync(instance.id)
 
 
 # ========== Lesson - Generic классы ==========

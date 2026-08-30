@@ -1,0 +1,23 @@
+import os
+from celery import Celery
+from celery.schedules import crontab
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+
+app = Celery('config')
+
+app.config_from_object('django.conf:settings', namespace='CELERY')
+
+app.autodiscover_tasks()
+
+# Расписание периодических задач (celery-beat)
+app.conf.beat_schedule = {
+    'block_inactive_users': {
+        'task': 'users.tasks.block_inactive_users',
+        'schedule': crontab(hour=0, minute=0),  # каждый день в полночь
+    },
+        'send_habit_reminders': {
+        'task': 'habits.tasks.send_habit_reminder',
+        'schedule': crontab(minute='*/1'),  # каждую минуту
+    },
+}

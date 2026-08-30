@@ -31,11 +31,14 @@ INSTALLED_APPS = [
     'django_filters',
     'django_celery_beat',
     'drf_yasg',
+    'corsheaders',
     'users',
     'lms',
+    'habits',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -174,4 +177,14 @@ CELERY_TASK_SOFT_TIME_LIMIT = 30 * 60
 DEFAULT_FROM_EMAIL = 'webmaster@localhost'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# Telegram настройки
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+
+# CORS настройки
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',      # React фронтенд
+    'http://127.0.0.1:3000',
+    'http://localhost:8080',      # Vue фронтенд
+    'http://127.0.0.1:8080',
+]
 

@@ -39,6 +39,7 @@ urlpatterns = [
     # API приложений
     path('api/', include('lms.urls')),
     path('api/', include('users.urls')),
+    path('api/', include('habits.urls')),
 ]
 
 # Для отображения медиафайлов в режиме разработки

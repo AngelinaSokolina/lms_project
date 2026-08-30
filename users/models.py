@@ -35,6 +35,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomUserManager()
 
+    telegram_chat_id = models.CharField(max_length=100, blank=True, null=True, verbose_name='Telegram chat ID')
+
     def __str__(self):
         return self.email
 

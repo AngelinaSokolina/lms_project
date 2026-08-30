@@ -16,4 +16,8 @@ app.conf.beat_schedule = {
         'task': 'users.tasks.block_inactive_users',
         'schedule': crontab(hour=0, minute=0),  # каждый день в полночь
     },
+        'send_habit_reminders': {
+        'task': 'habits.tasks.send_habit_reminder',
+        'schedule': crontab(minute='*/1'),  # каждую минуту
+    },
 }

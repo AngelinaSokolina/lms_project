@@ -15,6 +15,7 @@ def send_habit_reminder():
     # Получаем текущее время
     now = timezone.now()
     current_time = now.time()
+    today = now.date()
 
     # Находим привычки, которые нужно выполнить в этот час
     # Проверяем, что текущее время соответствует времени привычки
@@ -35,6 +36,13 @@ def send_habit_reminder():
         chat_id = getattr(habit.user, 'telegram_chat_id', None)
         if not chat_id:
             continue
+
+        # Проверяем периодичность: сколько дней прошло с последнего выполнения?
+        # Если у привычки нет даты последнего выполнения — считаем, что нужно отправить
+        # Для простоты проверяем, что сегодняшний день кратен периодичности от даты создания
+        days_since_created = (today - habit.created_at.date()).days
+        if days_since_created % habit.periodicity != 0:
+            continue  # сегодня не день выполнения
 
         # Формируем сообщение
         message = f"""

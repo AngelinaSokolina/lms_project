@@ -15,13 +15,8 @@ class HabitViewSet(viewsets.ModelViewSet):
     pagination_class = HabitPaginator
 
     def get_queryset(self):
-        """
-        Возвращает привычки текущего пользователя и публичные привычки других
-        """
-        user = self.request.user
-        return Habit.objects.filter(
-            models.Q(user=user) | models.Q(is_public=True)
-        ).distinct()
+        """Возвращает только привычки текущего пользователя"""
+        return Habit.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
         """При создании привычки автоматически назначаем владельца"""

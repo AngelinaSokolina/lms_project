@@ -12,11 +12,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Секреты/ключ приложения
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 # IP и домены, которые имеют доступ в приложение
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
 # Application definition
 INSTALLED_APPS = [
@@ -181,10 +180,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 
 # CORS настройки
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',      # React фронтенд
-    'http://127.0.0.1:3000',
-    'http://localhost:8080',      # Vue фронтенд
-    'http://127.0.0.1:8080',
-]
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
+
 

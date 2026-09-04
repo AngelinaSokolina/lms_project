@@ -2,7 +2,52 @@
 
 API для платформы онлайн-обучения, где пользователи могут создавать курсы и уроки.
 
-## Установка и запуск
+## Запуск через Docker (рекомендуемый способ)
+
+### 1. Скопируйте файл с переменными окружения:
+
+```bash
+cp .env.docker .env
+```
+### 2. Соберите и запустите контейнеры:
+
+```bash
+docker compose up -d --build
+```
+### 3. Выполните миграции:
+
+```bash
+docker compose exec web python manage.py migrate
+```
+### 4. Создайте суперпользователя:
+
+```bash
+docker compose exec web python manage.py createsuperuser
+```
+
+### 5. Проект доступен по адресу:
+
+```bash
+http://localhost:8000
+```
+
+### 6. Остановка контейнеров:
+
+```bash
+docker compose down
+```
+
+## Структура Docker-контейнеров
+
+| Сервис | Контейнер | Назначение |
+|--------|-----------|------------|
+| **db** | `lms_db` | PostgreSQL — база данных |
+| **redis** | `lms_redis` | Redis — брокер для Celery |
+| **web** | `lms_web` | Django — основное приложение |
+| **celery** | `lms_celery` | Celery worker — выполнение фоновых задач |
+| **celery-beat** | `lms_celery_beat` | Celery beat — запуск задач по расписанию |
+
+## Установка и альтернативный запуск (без Docker)
 
 ### 1. Клонирование репозитория
 
@@ -48,6 +93,15 @@ python manage.py runserver
 
 ## API Эндпоинты
 
+
+### Авторизация
+
+| Метод | URL | Описание |
+|-------|-----|----------|
+| POST | /api/token/| Получение JWT-токенов |
+| POST | /api/token/refresh/ | Обновление access-токена |
+
+
 ### Курсы (Course) — ViewSet
 
 | Метод | URL | Описание |
@@ -70,6 +124,33 @@ python manage.py runserver
 | PATCH | /api/lessons/{id}/ | Частичное обновление урока |
 | DELETE | /api/lessons/{id}/ | Удаление урока |
 
+
+### Привычки (Habits)
+| Метод | URL | Описание |
+|-------|-----|----------|
+| GET | `/api/habits/` | Список своих привычек |
+| GET | `/api/habits/public/` | Список публичных привычек |
+| POST | `/api/habits/` | Создание привычки |
+| GET | `/api/habits/{id}/` | Получение привычки |
+| PUT/PATCH | `/api/habits/{id}/` | Редактирование привычки |
+| DELETE | `/api/habits/{id}/` | Удаление привычки |
+
+---
+
+### Подписки
+| Метод | URL | Описание |
+|-------|-----|----------|
+| POST | `/api/subscription/` | Создать или удалить подписку на курс |
+
+---
+
+### Оплата (Stripe)
+| Метод | URL | Описание |
+|-------|-----|----------|
+| POST | `/api/payment/create/` | Создание платежа через Stripe |
+
+
+
 ## Примеры запросов
 
 ### Создание курса
@@ -82,35 +163,22 @@ POST /api/courses/
 }
 ```
 
-### Создание урока
+## Документация API
+После запуска сервера документация доступна по адресам:
 
-```json
-POST /api/lessons/
-{
-    "name": "Установка Python",
-    "description": "Как установить Python на Windows/Mac",
-    "video_url": "https://youtube.com/watch?v=example",
-    "course": 1
-}
+Swagger UI: http://localhost:8000/docs/
+
+ReDoc: http://localhost:8000/redoc/
+
+
+## Запуск тестов
+Все тесты
+```bash
+python manage.py test
 ```
-
-## Модели данных
-
-### Пользователь (CustomUser)
-- email (логин)
-- телефон
-- город
-- аватарка
-
-### Курс (Course)
-- название
-- превью (картинка)
-- описание
-
-### Урок (Lesson)
-- название
-- описание
-- превью (картинка)
-- ссылка на видео
-- курс (связь с Course)
+Тесты привычек с покрытием
+```bash
+coverage run manage.py test habits
+coverage report
+```
 

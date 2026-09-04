@@ -4,6 +4,8 @@ venv/
 env/
 .env
 
+.env.docker
+
 # База данных
 *.sqlite3
 *.db

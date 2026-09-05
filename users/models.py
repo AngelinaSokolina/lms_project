@@ -35,6 +35,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomUserManager()
 
+    telegram_chat_id = models.CharField(max_length=100, blank=True, null=True, verbose_name='Telegram chat ID')
+
     def __str__(self):
         return self.email
 
@@ -76,6 +78,13 @@ class Payment(models.Model):
         default=PaymentMethod.CASH,
         verbose_name='Способ оплаты'
     )
+
+    # Новые поля для Stripe
+    stripe_product_id = models.CharField(max_length=500, blank=True, null=True, verbose_name='ID продукта в Stripe')
+    stripe_price_id = models.CharField(max_length=500, blank=True, null=True, verbose_name='ID цены в Stripe')
+    stripe_session_id = models.CharField(max_length=500, blank=True, null=True, verbose_name='ID сессии в Stripe')
+    stripe_payment_url = models.URLField(max_length=500, blank=True, null=True, verbose_name='Ссылка на оплату')
+    status = models.CharField(max_length=50, default='pending', verbose_name='Статус платежа')
 
     class Meta:
         verbose_name = 'Платеж'

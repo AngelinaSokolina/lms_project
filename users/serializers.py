@@ -16,7 +16,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'email', 'phone', 'city', 'avatar', 'is_active', 'is_staff', 'password']
+        fields = ['id', 'email', 'phone', 'city', 'avatar', 'is_active', 'is_staff', 'telegram_chat_id', 'password']
         read_only_fields = ['is_active', 'is_staff']
         extra_kwargs = {
             'password': {'write_only': True}  # Пароль не выводится в ответе
@@ -29,4 +29,6 @@ class PaymentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Payment
-        fields = ['id', 'user', 'user_email', 'payment_date', 'course', 'lesson', 'amount', 'payment_method']
+        fields = ['id', 'user', 'user_email', 'payment_date', 'course', 'lesson',
+                  'amount', 'payment_method', 'stripe_payment_url', 'status']
+        read_only_fields = ['stripe_payment_url', 'status']

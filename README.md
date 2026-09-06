@@ -47,6 +47,71 @@ docker compose down
 | **celery** | `lms_celery` | Celery worker — выполнение фоновых задач |
 | **celery-beat** | `lms_celery_beat` | Celery beat — запуск задач по расписанию |
 
+## 🚀 Развертывание на сервере (Yandex Cloud)
+
+### 1. Подключитесь к серверу по SSH:
+
+```bash
+ssh ubuntu@ВАШ_IP_АДРЕС
+```
+
+###  2. Установите Docker и Docker Compose на сервере:
+
+```bash
+sudo apt update
+sudo apt install -y docker.io docker-compose
+sudo usermod -aG docker ubuntu
+sudo reboot
+```
+
+###  3. Клонируйте проект на сервер:
+
+```bash
+git clone https://github.com/AngelinaSokolina/lms_project.git
+cd lms_project
+```
+
+###  4. Создайте файл .env с переменными окружения:
+
+```bash
+cp .env.docker .env
+nano .env
+```
+
+Укажите реальные значения для SECRET_KEY, STRIPE_API_KEY, TELEGRAM_BOT_TOKEN и др.
+
+###  5. Запустите проект через Docker Compose:
+
+```bash
+docker-compose up -d --build
+```
+
+### 6. Выполните миграции и создайте суперпользователя:
+
+```bash
+docker-compose exec web python manage.py migrate
+docker-compose exec web python manage.py createsuperuser
+```
+
+###  7. Проект будет доступен по IP-адресу сервера:
+
+http://ВАШ_IP_АДРЕС
+
+
+###  8. Остановка контейнеров на сервере:
+
+```bash
+docker-compose down
+```
+
+### 9. Обновление кода на сервере:
+
+```bash
+cd ~/lms_project
+git pull
+docker-compose down
+docker-compose up -d --build
+```
 ## Установка и альтернативный запуск (без Docker)
 
 ### 1. Клонирование репозитория

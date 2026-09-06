@@ -42,6 +42,8 @@ jobs:
         PASSWORD: postgres
         HOST: localhost
         PORT: 5432
+        CORS_ALLOWED_ORIGINS: http://localhost
+        ALLOWED_HOSTS: localhost,127.0.0.1
       run: python manage.py test
 
   deploy:
